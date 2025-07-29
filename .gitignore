@@ -1,0 +1,36 @@
+# Compiled class files
+*.class
+
+# Package Files
+*.jar
+*.war
+*.ear
+
+# Log files
+*.log
+
+# Build directories
+**/target/
+build/
+
+# Maven-specific
+.idea/
+.classpath
+.project
+.settings/
+
+# Eclipse-specific
+.metadata/
+
+# IntelliJ IDEA-specific
+*.iml
+.idea/
+.vscode/
+
+# Gradle-specific
+.gradle/
+build/
+
+# Operating System Files
+.DS_Store
+Thumbs.db
