@@ -13,14 +13,14 @@ import javax.crypto.spec.SecretKeySpec;
 @Component
 public class JwtUtil {
     
-    private String jwtSecret = "JH78hd73Hduwhf8q93FHDjff9283HFuew";
+    private String jwtSecret = "s3cureKeyHashCode123456789012345678901234567890";
 
     public String generateToken(String username) {
         return Jwts.builder()
             .setSubject(username)
             .setIssuedAt(new Date())
             .setExpiration(new Date(System.currentTimeMillis() + 86400000))
-            .signWith(SignatureAlgorithm.HS512, jwtSecret)
+            .signWith(SignatureAlgorithm.HS256, jwtSecret)
             .compact();
     }
 

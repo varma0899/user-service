@@ -18,6 +18,13 @@ public class UserService {
         }
         return null; 
     }
+    
+    public User findById(Long id) {
+        return userRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+    }
 
-    // You can also add registerUser() and other methods here
+    public User findByUsername(String username) {
+        return userRepository.findByEmail(username); 
+    }
 }

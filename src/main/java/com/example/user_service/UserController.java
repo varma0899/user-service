@@ -1,10 +1,13 @@
 package com.example.user_service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.userservice.util.JwtUtil;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,10 +39,10 @@ public class UserController {
     }
 
     // Read user by ID
-    @GetMapping("/{id}")
-    public Optional<User> getUserById(@PathVariable Long id) {
-        return userRepository.findById(id);
-    }
+//    @GetMapping("/{id}")
+//    public Optional<User> getUserById(@PathVariable Long id) {
+//        return userRepository.findById(id);
+//    }
 
     // Update user
     @PutMapping("/{id}")
@@ -69,5 +72,32 @@ public class UserController {
             return ResponseEntity.status(401).body("Invalid username or password");
         }
     }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable Long id, HttpServletRequest request) {
+        String token = extractToken(request);
+        if (token == null || !jwtUtil.validate(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String usernameFromToken = jwtUtil.getUsername(token);
+        User tokenUser = userService.findByUsername(usernameFromToken);
+        if (!tokenUser.getId().equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        User user = userService.findById(id);
+        System.out.println("User validated");
+        return ResponseEntity.ok(user);
+    }
+
+    private String extractToken(HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+        if (header != null && header.startsWith("Bearer ")) {
+            return header.substring(7);
+        }
+        return null;
+    }
+
 
 }
